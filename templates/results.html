@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Movie Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #232527;
+      padding: 30px 0;
+      margin: 0;
+    }
+    h2 {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      max-width: 1500px;
+      margin: auto;
+    }
+    .movie-card {
+      background: #232527;
+      border-radius: 15px;
+      box-shadow: 0 0 8px 2px #6c7a89;
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      transition: box-shadow 0.3s, transform 0.3s;
+      border: 2px solid #393e46;
+      position: relative;
+    }
+    .movie-card:hover {
+      box-shadow: 0 0 20px 6px #7f5af0;
+      transform: translateY(-5px) scale(1.03);
+      border-color: #7f5af0;
+    }
+    .poster {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      background: #111;
+      border-bottom: 2px solid #393e46;
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .poster:hover {
+      filter: brightness(0.85);
+    }
+    .movie-info {
+      padding: 18px 14px 15px 14px;
+      color: #fff;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .movie-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .movie-desc {
+      font-size: 0.98rem;
+      color: #e0e0e0;
+      margin-bottom: 0;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .movie-details {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(.4,2,.6,1), opacity 0.3s;
+      background: #181a1b;
+      color: #d6d6d6;
+      padding: 0 16px;
+      border-top: 1px solid #393e46;
+      font-size: 0.97rem;
+      margin-bottom: 10px;
+      border-radius: 0 0 12px 12px;
+    }
+    .movie-card.expanded .movie-details {
+      max-height: 350px;
+      opacity: 1;
+      padding: 14px 16px 18px 16px;
+    }
+    .movie-card.expanded {
+      box-shadow: 0 0 28px 8px #7f5af0;
+      border-color: #7f5af0;
+    }
+    .section-title {
+      font-weight: bold;
+      color: #fff;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .back-link {
+      display: block;
+      margin: 40px auto 0 auto;
+      width: max-content;
+      text-decoration: none;
+      color: #7f5af0;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 8px 18px;
+      border-radius: 6px;
+      background: #181a1b;
+      border: 1px solid #7f5af0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .back-link:hover {
+      background: #7f5af0;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Your Movie Recommendations</h2>
+  <div class="cards-container">
+    {% for movie in recommendations %}
+      <div class="movie-card">
+        <img class="poster" src="{{ movie.poster_url }}" alt="Poster for {{ movie.name }}" onclick="toggleCard(this)" />
+        <div class="movie-info">
+          <div class="movie-title">{{ movie.name }}</div>
+          <div class="movie-desc">{{ movie.description }}</div>
+        </div>
+        <div class="movie-details">
+          <p><span class="section-title">Rating:</span> {{ movie.rating }}</p>
+          <p><span class="section-title">Duration:</span> {{ movie.duration }} minutes</p>
+          <p><span class="section-title">Genre:</span> {{ movie.genre }}</p>
+          <p><span class="section-title">Cast:</span> {{ movie.cast }}</p>
+          <p><span class="section-title">Watch on:</span> {{ movie.watch_platforms }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <a class="back-link" href="{{ url_for('index') }}">← Back to Home</a>
+  <script>
+    function toggleCard(img) {
+      // Collapse any expanded card except the one being clicked
+      document.querySelectorAll('.movie-card.expanded').forEach(card => {
+        if (card !== img.closest('.movie-card')) {
+          card.classList.remove('expanded');
+        }
+      });
+      // Toggle the clicked card
+      img.closest('.movie-card').classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>

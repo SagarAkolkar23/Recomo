@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glow {
+      box-shadow: 0 0 10px #7f5af0, 0 0 20px #7f5af0;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-start font-sans px-6 py-8">
+
+  <!-- Navigation Bar -->
+  <div class="w-full max-w-6xl flex justify-between items-center bg-gray-900 border border-gray-700 rounded-full p-2 mt-4 shadow-lg z-50">
+    <!-- Toggle Bar -->
+    <div class="flex space-x-2 ml-2">
+      <a href="{{ url_for('index') }}"
+         class="px-5 py-2 rounded-full transition duration-200 text-sm sm:text-base hover:bg-[#7f5af0] hover:text-white {% if request.path == '/movies_pref' or request.path == '/' %}bg-[#7f5af0] text-white{% else %}text-gray-300{% endif %}">
+        Movies
+      </a>
+      <a href="{{ url_for('books_pref') }}"
+         class="px-5 py-2 rounded-full transition duration-200 text-sm sm:text-base hover:bg-[#7f5af0] hover:text-white {% if request.path == '/books_pref' %}bg-[#7f5af0] text-white{% else %}text-gray-300{% endif %}">
+        Books
+      </a>
+    </div>
+
+    <!-- Links -->
+    <div class="flex space-x-4 mr-2 text-sm sm:text-base">
+      <a href="{{ url_for('history') }}"
+         class="text-gray-300 hover:text-[#7f5af0] transition duration-200">Search History</a>
+      <a href="{{ url_for('logout') }}"
+         class="text-gray-300 hover:text-[#7f5af0] transition duration-200">Logout</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-10 items-center mt-16">
+    <!-- Left Side -->
+    <div class="space-y-8">
+      <div>
+        <h1 class="text-4xl font-bold text-[#7f5af0] mb-2">Welcome, {{ username }}</h1>
+        <p class="text-gray-400 text-lg">Get personalized recommendations based on your mood and interests.</p>
+      </div>
+      
+      <form method="POST" action="{{ url_for('recommend') }}" onsubmit="return collectPreferences(event)" class="space-y-8">
+
+        <!-- Mood Tags -->
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">What's your mood today?</h3>
+          <div id="mood-tags" class="flex flex-wrap gap-3">
+            <button type="button" class="neon-tag">Happy</button>
+            <button type="button" class="neon-tag">Sad</button>
+            <button type="button" class="neon-tag">Thrilled</button>
+            <button type="button" class="neon-tag">Lonely</button>
+            <button type="button" class="neon-tag">Adventurous</button>
+            <button type="button" class="neon-tag">Calm</button>
+            <button type="button" class="neon-tag">Nostalgic</button>
+          </div>
+        </div>
+      
+        <!-- Genre Tags -->
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Select movie type(s)</h3>
+          <div id="genre-tags" class="flex flex-wrap gap-3">
+            <button type="button" class="neon-tag">Action</button>
+            <button type="button" class="neon-tag">Rom-Com</button>
+            <button type="button" class="neon-tag">Mystery</button>
+            <button type="button" class="neon-tag">Sci-Fi</button>
+            <button type="button" class="neon-tag">Horror</button>
+            <button type="button" class="neon-tag">Drama</button>
+            <button type="button" class="neon-tag">Documentary</button>
+            <button type="button" class="neon-tag">Fantasy</button>
+            <button type="button" class="neon-tag">Animated</button>
+          </div>
+        </div>
+      
+        <!-- Language -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Preferred language:</h3>
+          <select name="language" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+            <option value="">Select language</option>
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Korean</option>
+            <option>Japanese</option>
+            <option>Spanish</option>
+            <option>Any</option>
+          </select>
+        </div>
+      
+        <!-- Movie Length -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Preferred movie length:</h3>
+          <select name="length" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+            <option value="">Select length</option>
+            <option>Short (under 90 min)</option>
+            <option>Medium (90–150 min)</option>
+            <option>Long (150+ min)</option>
+          </select>
+        </div>
+      
+        <!-- Target Audience -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Target audience:</h3>
+          <select name="audience" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+            <option value="">Select audience</option>
+            <option>Kids</option>
+            <option>Teens</option>
+            <option>Adults</option>
+            <option>Everyone</option>
+          </select>
+        </div>
+      
+        <!-- Custom Keywords -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Specific interests or keywords:</h3>
+          <input name="keywords" type="text" placeholder="e.g. space travel, mental health, based on true story..."
+                 class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        </div>
+      
+        <!-- Hidden input -->
+        <input type="hidden" name="preference" id="preference-input" required>
+      
+        <!-- Submit -->
+        <button type="submit"
+                class="w-full py-3 rounded-lg bg-[#7f5af0] hover:bg-[#a78bfa] text-white text-lg font-semibold glow transition duration-300">
+          Get Recommendations
+        </button>
+      </form>
+    </div>
+    <!-- Right Side: Image aligned to the right -->
+    <div class="flex justify-center lg:justify-end items-center px-4">
+      <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTju_NMOLCleJdaf74ukEY5KjlVCDee0cvrvmYTnKs4YJ3xfUQiIz6Tbd2328BO6LtgOsXxZBZtCDYaJCyLhp4t5tw4hVVU_AThTgQB8xMXb1-A23IPOJCC" 
+           alt="Recommendation Illustration" 
+           class="w-full max-w-md rounded-xl shadow-xl object-contain" />
+    </div>
+  </div>
+      
+  <!-- Scripts -->
+  <script>
+    document.querySelectorAll('.neon-tag').forEach(btn => {
+      btn.classList.add(
+        'px-4', 'py-2', 'rounded-full', 'border', 'border-gray-600',
+        'text-white', 'hover:text-[#7f5af0]', 'hover:border-[#7f5af0]',
+        'transition', 'duration-200', 'cursor-pointer'
+      );
+
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('bg-[#7f5af0]');
+        btn.classList.toggle('text-white');
+        btn.classList.toggle('border-[#7f5af0]');
+        btn.classList.toggle('glow');
+      });
+    });
+
+    function collectPreferences(e) {
+  e.preventDefault(); // Always prevent default to ensure JS runs before submit
+
+  // Use escaped selector for Tailwind's arbitrary class
+  const selectedTags = Array.from(document.querySelectorAll('.neon-tag.bg-\\[\\#7f5af0\\]'))
+                            .map(el => el.textContent.trim());
+
+  // Get other form values
+  const language = document.querySelector('select[name="language"]').value;
+  const length = document.querySelector('select[name="length"]').value;
+  const audience = document.querySelector('select[name="audience"]').value;
+  const keywords = document.querySelector('input[name="keywords"]').value;
+
+  // Build preference string
+  let preferenceArr = [];
+  if (selectedTags.length) preferenceArr.push("Tags: " + selectedTags.join(', '));
+  if (language) preferenceArr.push("Language: " + language);
+  if (length) preferenceArr.push("Length: " + length);
+  if (audience) preferenceArr.push("Audience: " + audience);
+  if (keywords) preferenceArr.push("Keywords: " + keywords);
+
+  // Set hidden input value
+  document.getElementById('preference-input').value = preferenceArr.join(' | ');
+
+  // Prevent submit if nothing is selected
+  if (preferenceArr.length === 0) {
+    alert("Please select at least one preference.");
+    return false;
+  }
+
+  // Submit form
+  e.target.submit();
+}
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Search History - {{ username }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen font-sans">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 right-0 bg-gray-800 shadow-md z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-semibold text-purple-400">Search History</h1>
+      <a href="{{ url_for('index') }}" 
+         class="text-purple-400 hover:text-purple-300 transition duration-200 font-medium">
+         ← Back to Home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main container -->
+  <main class="max-w-4xl mx-auto px-6 pt-24 pb-12">
+
+    <section>
+      <h2 class="text-3xl font-bold mb-8 text-purple-400">Hello, {{ username }} 👋</h2>
+      
+      {% if history %}
+        <ul class="space-y-4">
+          {% for item in history %}
+          <li class="bg-gray-800 rounded-lg shadow-md p-5 hover:shadow-lg transition-shadow duration-300">
+            <p class="text-lg font-semibold text-white mb-1">{{ item.preference }}</p>
+            <p class="text-sm text-gray-400">Searched at: <time datetime="{{ item.searched_at_str }}">{{ item.searched_at_str }}</time> UTC</p>
+        </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-400 text-center text-lg mt-10">No search history found.</p>
+      {% endif %}
+    </section>
+
+  </main>
+
+</body>
+</html>

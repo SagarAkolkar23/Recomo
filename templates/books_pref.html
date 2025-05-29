@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Preferences</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glow {
+      box-shadow: 0 0 10px #7f5af0, 0 0 20px #7f5af0;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-start font-sans px-6 py-8">
+
+  <!-- Navigation Bar -->
+  <div class="w-full max-w-6xl flex justify-center bg-gray-900 border border-gray-700 rounded-full p-2 mt-4 shadow-lg z-50">
+    <div class="flex space-x-2">
+      <a href="{{ url_for('index') }}"
+         class="px-5 py-2 rounded-full transition duration-200 text-sm sm:text-base hover:bg-[#7f5af0] hover:text-white {% if request.path == '/movies_pref' or request.path == '/' %}bg-[#7f5af0] text-white{% else %}text-gray-300{% endif %}">
+        Movies
+      </a>
+      <a href="{{ url_for('books_pref') }}"
+         class="px-5 py-2 rounded-full transition duration-200 text-sm sm:text-base hover:bg-[#7f5af0] hover:text-white {% if request.path == '/books_pref' %}bg-[#7f5af0] text-white{% else %}text-gray-300{% endif %}">
+        Books
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-10 items-center mt-16">
+    <!-- Left Side Form -->
+    <div class="space-y-8 max-w-xl mx-auto">
+      <h1 class="text-4xl font-bold text-[#7f5af0] mb-6 text-center">Tell us your book interests</h1>
+
+      <form method="POST" action="{{ url_for('bookresults') }}" onsubmit="collectPreferences(event)" class="space-y-8">
+
+        <!-- Genre Tags -->
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Choose genres or themes:</h3>
+          <div id="genre-tags" class="flex flex-wrap gap-3">
+            <button type="button" class="neon-tag">Fantasy</button>
+            <button type="button" class="neon-tag">Science</button>
+            <button type="button" class="neon-tag">Self-help</button>
+            <button type="button" class="neon-tag">Romance</button>
+            <button type="button" class="neon-tag">Adventure</button>
+            <button type="button" class="neon-tag">Mystery</button>
+            <button type="button" class="neon-tag">Historical</button>
+            <button type="button" class="neon-tag">Philosophy</button>
+          </div>
+        </div>
+
+        <!-- Mood Tags -->
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">What's your current mood?</h3>
+          <div id="mood-tags" class="flex flex-wrap gap-3">
+            <button type="button" class="neon-tag">Inspired</button>
+            <button type="button" class="neon-tag">Curious</button>
+            <button type="button" class="neon-tag">Relaxed</button>
+            <button type="button" class="neon-tag">Adventurous</button>
+            <button type="button" class="neon-tag">Reflective</button>
+            <button type="button" class="neon-tag">Nostalgic</button>
+          </div>
+        </div>
+
+        <!-- Writing Style -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Preferred writing style:</h3>
+          <select name="style" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+            <option value="">Select style</option>
+            <option>Simple and clear</option>
+            <option>Descriptive and poetic</option>
+            <option>Witty and humorous</option>
+            <option>Philosophical and deep</option>
+          </select>
+        </div>
+
+        <!-- Book Length -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Preferred book length:</h3>
+          <select name="length" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+            <option value="">Select length</option>
+            <option>Short (under 200 pages)</option>
+            <option>Medium (200–400 pages)</option>
+            <option>Long (400+ pages)</option>
+          </select>
+        </div>
+
+        <!-- Target Audience -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Target audience:</h3>
+          <select name="audience" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+            <option value="">Select audience</option>
+            <option>Young Adults</option>
+            <option>Adults</option>
+            <option>Everyone</option>
+          </select>
+        </div>
+
+        <!-- Custom Keywords -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Specific interests or keywords:</h3>
+          <input name="keywords" type="text" placeholder="e.g. space, Greek mythology, productivity..."
+                 class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white" />
+        </div>
+
+        <!-- Hidden Input -->
+        <input type="hidden" name="preference" id="preference-input" required />
+
+        <!-- Submit Button -->
+        <button type="submit"
+                class="w-full py-3 rounded-lg bg-[#7f5af0] hover:bg-[#a78bfa] text-white text-lg font-semibold glow transition duration-300">
+          Get Book Recommendations
+        </button>
+      </form>
+    </div>
+
+    <!-- Right Side: Image -->
+    <div class="flex justify-center lg:justify-end items-center px-4">
+      <img
+        src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80"
+        alt="Books Illustration"
+        class="w-full max-w-xl rounded-xl shadow-xl object-contain"
+      />
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.neon-tag').forEach(btn => {
+      btn.classList.add(
+        'px-4', 'py-2', 'rounded-full', 'border', 'border-gray-600',
+        'text-white', 'hover:text-[#7f5af0]', 'hover:border-[#7f5af0]',
+        'transition', 'duration-200', 'cursor-pointer'
+      );
+  
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('bg-[#7f5af0]');
+        btn.classList.toggle('text-white');
+        btn.classList.toggle('border-[#7f5af0]');
+        btn.classList.toggle('glow');
+      });
+    });
+  
+    function collectPreferences(e) {
+  e.preventDefault();
+
+  const selectedTags = Array.from(document.querySelectorAll('.neon-tag.bg-\\[\\#7f5af0\\]'))
+    .map(el => el.textContent.trim());
+  const style = document.querySelector('select[name="style"]').value;
+  const length = document.querySelector('select[name="length"]').value;
+  const audience = document.querySelector('select[name="audience"]').value;
+  const keywords = document.querySelector('input[name="keywords"]').value;
+
+  let preferenceArr = [];
+  if (selectedTags.length) preferenceArr.push("Tags: " + selectedTags.join(', '));
+  if (style) preferenceArr.push("Style: " + style);
+  if (length) preferenceArr.push("Length: " + length);
+  if (audience) preferenceArr.push("Audience: " + audience);
+  if (keywords) preferenceArr.push("Keywords: " + keywords);
+
+  document.getElementById('preference-input').value = preferenceArr.join(' | ');
+
+  if (preferenceArr.length === 0) {
+    alert("Please select at least one preference.");
+    return false;
+  }
+
+  e.target.submit();
+}
+  </script>
+
+</body>
+</html>

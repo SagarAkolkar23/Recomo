@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1f1f1f;
+      padding: 30px 0;
+      margin: 0;
+    }
+    h2 {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      max-width: 1500px;
+      margin: auto;
+    }
+    .book-card {
+      background: #2d2d2d;
+      border-radius: 15px;
+      box-shadow: 0 0 8px 2px #6c7a89;
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      transition: box-shadow 0.3s, transform 0.3s;
+      border: 2px solid #444;
+      position: relative;
+    }
+    .book-card:hover {
+      box-shadow: 0 0 20px 6px #7f5af0;
+      transform: translateY(-5px) scale(1.03);
+      border-color: #7f5af0;
+    }
+    .cover {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      background: #111;
+      border-bottom: 2px solid #393e46;
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .cover:hover {
+      filter: brightness(0.85);
+    }
+    .book-info {
+      padding: 18px 14px 15px 14px;
+      color: #fff;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .book-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .book-desc {
+      font-size: 0.95rem;
+      color: #e0e0e0;
+      margin-bottom: 0;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .book-details {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(.4,2,.6,1), opacity 0.3s;
+      background: #181a1b;
+      color: #d6d6d6;
+      padding: 0 16px;
+      border-top: 1px solid #393e46;
+      font-size: 0.96rem;
+      margin-bottom: 10px;
+      border-radius: 0 0 12px 12px;
+    }
+    .book-card.expanded .book-details {
+      max-height: 400px;
+      opacity: 1;
+      padding: 14px 16px 18px 16px;
+    }
+    .book-card.expanded {
+      box-shadow: 0 0 28px 8px #7f5af0;
+      border-color: #7f5af0;
+    }
+    .section-title {
+      font-weight: bold;
+      color: #fff;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .back-link {
+      display: block;
+      margin: 40px auto 0 auto;
+      width: max-content;
+      text-decoration: none;
+      color: #7f5af0;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 8px 18px;
+      border-radius: 6px;
+      background: #181a1b;
+      border: 1px solid #7f5af0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .back-link:hover {
+      background: #7f5af0;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Your Book Recommendations</h2>
+  <div class="cards-container">
+    {% for book in recommendations %}
+      <div class="book-card">
+        <img class="cover" src="{{ book.cover_url }}" alt="Cover for {{ book.title }}" onclick="toggleCard(this)" />
+        <div class="book-info">
+          <div class="book-title">{{ book.title }}</div>
+          <div class="book-desc">{{ book.description }}</div>
+        </div>
+        <div class="book-details">
+          <p><span class="section-title">Author:</span> {{ book.author }}</p>
+          <p><span class="section-title">Genre:</span> {{ book.genre }}</p>
+          <p><span class="section-title">Purchase Links:</span><br/>
+            {% for name, link in book.purchase_links.items() %}
+              <a href="{{ link }}" target="_blank" style="color:#7f5af0">{{ name }}</a><br/>
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <a class="back-link" href="{{ url_for('index') }}">&larr; Back to Home</a>
+  <script>
+    function toggleCard(img) {
+      document.querySelectorAll('.book-card.expanded').forEach(card => {
+        if (card !== img.closest('.book-card')) {
+          card.classList.remove('expanded');
+        }
+      });
+      img.closest('.book-card').classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>
