@@ -11,14 +11,16 @@ For each movie, provide the following details in a structured JSON format:
 - name: Movie title
 - duration: Duration in minutes
 - rating: IMDb or general rating
-- poster_url: A link to the movie's poster
+- poster_url: A direct URL to a high-quality poster image for the movie (preferably from IMDb, TMDb, or Wikipedia; do not use Google search links or generic images)
 - description: A brief description of the movie
 - genre: Type or genre of the movie
 - cast: Main cast members
 - watch_platforms: Platforms where the movie can be streamed (e.g., Netflix, Prime Video)
 - watch_links: Direct URLs where the movie can be streamed (if available)
 
+
 User Preferences: {preference}
+remember to get a image address for poster
 Respond ONLY in pure JSON format without any explanation.
 """
 

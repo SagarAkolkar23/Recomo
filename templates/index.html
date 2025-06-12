@@ -2,21 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Home</title>
+  <title>Recomo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: url('https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTju_NMOLCleJdaf74ukEY5KjlVCDee0cvrvmYTnKs4YJ3xfUQiIz6Tbd2328BO6LtgOsXxZBZtCDYaJCyLhp4t5tw4hVVU_AThTgQB8xMXb1-A23IPOJCC') no-repeat center center/cover;
+      z-index: -2;
+      filter: brightness(0.4) blur(4px);
+    }
+    .glass {
+      background: rgba(24, 26, 27, 0.55);
+      border: 1.5px solid rgba(127, 90, 240, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      border-radius: 18px;
+    }
     .glow {
       box-shadow: 0 0 10px #7f5af0, 0 0 20px #7f5af0;
     }
   </style>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col items-center justify-start font-sans px-6 py-8">
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center font-sans px-2 py-8">
 
   <!-- Navigation Bar -->
-  <div class="w-full max-w-6xl flex justify-between items-center bg-gray-900 border border-gray-700 rounded-full p-2 mt-4 shadow-lg z-50">
+  <div class="glass w-full max-w-3xl flex flex-col sm:flex-row justify-center sm:justify-between items-center bg-gray-900/70 border border-gray-700 rounded-full p-2 mt-4 shadow-lg z-50 mx-auto">
     <!-- Toggle Bar -->
-    <div class="flex space-x-2 ml-2">
+    <div class="flex space-x-2 mb-2 sm:mb-0 sm:ml-2">
       <a href="{{ url_for('index') }}"
          class="px-5 py-2 rounded-full transition duration-200 text-sm sm:text-base hover:bg-[#7f5af0] hover:text-white {% if request.path == '/movies_pref' or request.path == '/' %}bg-[#7f5af0] text-white{% else %}text-gray-300{% endif %}">
         Movies
@@ -28,7 +44,7 @@
     </div>
 
     <!-- Links -->
-    <div class="flex space-x-4 mr-2 text-sm sm:text-base">
+    <div class="flex space-x-4 sm:mr-2 text-sm sm:text-base">
       <a href="{{ url_for('history') }}"
          class="text-gray-300 hover:text-[#7f5af0] transition duration-200">Search History</a>
       <a href="{{ url_for('logout') }}"
@@ -37,20 +53,18 @@
   </div>
 
   <!-- Main Content -->
-  <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-10 items-center mt-16">
-    <!-- Left Side -->
-    <div class="space-y-8">
-      <div>
+  <div class="w-full flex flex-col items-center justify-center mt-16">
+    <div class="glass w-full max-w-3xl mx-auto space-y-8 p-12 flex flex-col items-center" style="min-width:400px; min-height:700px;">
+      <div class="text-center">
         <h1 class="text-4xl font-bold text-[#7f5af0] mb-2">Welcome, {{ username }}</h1>
-        <p class="text-gray-400 text-lg">Get personalized recommendations based on your mood and interests.</p>
+        <p class="text-gray-300 text-lg">Get personalized recommendations based on your mood and interests.</p>
       </div>
       
-      <form method="POST" action="{{ url_for('recommend') }}" onsubmit="return collectPreferences(event)" class="space-y-8">
-
+      <form method="POST" action="{{ url_for('recommend') }}" onsubmit="return collectPreferences(event)" class="space-y-8 w-full flex flex-col items-center">
         <!-- Mood Tags -->
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-3">What's your mood today?</h3>
-          <div id="mood-tags" class="flex flex-wrap gap-3">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold text-white mb-3 text-center">What's your mood today?</h3>
+          <div id="mood-tags" class="flex flex-wrap gap-3 justify-center">
             <button type="button" class="neon-tag">Happy</button>
             <button type="button" class="neon-tag">Sad</button>
             <button type="button" class="neon-tag">Thrilled</button>
@@ -62,9 +76,9 @@
         </div>
       
         <!-- Genre Tags -->
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-3">Select movie type(s)</h3>
-          <div id="genre-tags" class="flex flex-wrap gap-3">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold text-white mb-3 text-center">Select movie type(s)</h3>
+          <div id="genre-tags" class="flex flex-wrap gap-3 justify-center">
             <button type="button" class="neon-tag">Action</button>
             <button type="button" class="neon-tag">Rom-Com</button>
             <button type="button" class="neon-tag">Mystery</button>
@@ -78,9 +92,9 @@
         </div>
       
         <!-- Language -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Preferred language:</h3>
-          <select name="language" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Preferred language:</h3>
+          <select name="language" class="w-full p-3 bg-gray-900/80 border border-gray-700 rounded-lg text-white glass">
             <option value="">Select language</option>
             <option>English</option>
             <option>Hindi</option>
@@ -92,9 +106,9 @@
         </div>
       
         <!-- Movie Length -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Preferred movie length:</h3>
-          <select name="length" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Preferred movie length:</h3>
+          <select name="length" class="w-full p-3 bg-gray-900/80 border border-gray-700 rounded-lg text-white glass">
             <option value="">Select length</option>
             <option>Short (under 90 min)</option>
             <option>Medium (90–150 min)</option>
@@ -103,9 +117,9 @@
         </div>
       
         <!-- Target Audience -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Target audience:</h3>
-          <select name="audience" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Target audience:</h3>
+          <select name="audience" class="w-full p-3 bg-gray-900/80 border border-gray-700 rounded-lg text-white glass">
             <option value="">Select audience</option>
             <option>Kids</option>
             <option>Teens</option>
@@ -115,10 +129,10 @@
         </div>
       
         <!-- Custom Keywords -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Specific interests or keywords:</h3>
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Specific interests or keywords:</h3>
           <input name="keywords" type="text" placeholder="e.g. space travel, mental health, based on true story..."
-                 class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+                 class="w-full p-3 bg-gray-900/80 border border-gray-700 rounded-lg text-white glass">
         </div>
       
         <!-- Hidden input -->
@@ -126,16 +140,10 @@
       
         <!-- Submit -->
         <button type="submit"
-                class="w-full py-3 rounded-lg bg-[#7f5af0] hover:bg-[#a78bfa] text-white text-lg font-semibold glow transition duration-300">
+                class="w-full py-3 rounded-lg bg-[#7f5af0] hover:bg-[#a78bfa] text-white text-lg font-semibold glow transition duration-300 mt-2">
           Get Recommendations
         </button>
       </form>
-    </div>
-    <!-- Right Side: Image aligned to the right -->
-    <div class="flex justify-center lg:justify-end items-center px-4">
-      <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTju_NMOLCleJdaf74ukEY5KjlVCDee0cvrvmYTnKs4YJ3xfUQiIz6Tbd2328BO6LtgOsXxZBZtCDYaJCyLhp4t5tw4hVVU_AThTgQB8xMXb1-A23IPOJCC" 
-           alt="Recommendation Illustration" 
-           class="w-full max-w-md rounded-xl shadow-xl object-contain" />
     </div>
   </div>
       
@@ -145,7 +153,7 @@
       btn.classList.add(
         'px-4', 'py-2', 'rounded-full', 'border', 'border-gray-600',
         'text-white', 'hover:text-[#7f5af0]', 'hover:border-[#7f5af0]',
-        'transition', 'duration-200', 'cursor-pointer'
+        'transition', 'duration-200', 'cursor-pointer', 'glass'
       );
 
       btn.addEventListener('click', () => {
@@ -157,39 +165,38 @@
     });
 
     function collectPreferences(e) {
-  e.preventDefault(); // Always prevent default to ensure JS runs before submit
+      e.preventDefault(); // Always prevent default to ensure JS runs before submit
 
-  // Use escaped selector for Tailwind's arbitrary class
-  const selectedTags = Array.from(document.querySelectorAll('.neon-tag.bg-\\[\\#7f5af0\\]'))
-                            .map(el => el.textContent.trim());
+      // Use escaped selector for Tailwind's arbitrary class
+      const selectedTags = Array.from(document.querySelectorAll('.neon-tag.bg-\\[\\#7f5af0\\]'))
+                                .map(el => el.textContent.trim());
 
-  // Get other form values
-  const language = document.querySelector('select[name="language"]').value;
-  const length = document.querySelector('select[name="length"]').value;
-  const audience = document.querySelector('select[name="audience"]').value;
-  const keywords = document.querySelector('input[name="keywords"]').value;
+      // Get other form values
+      const language = document.querySelector('select[name="language"]').value;
+      const length = document.querySelector('select[name="length"]').value;
+      const audience = document.querySelector('select[name="audience"]').value;
+      const keywords = document.querySelector('input[name="keywords"]').value;
 
-  // Build preference string
-  let preferenceArr = [];
-  if (selectedTags.length) preferenceArr.push("Tags: " + selectedTags.join(', '));
-  if (language) preferenceArr.push("Language: " + language);
-  if (length) preferenceArr.push("Length: " + length);
-  if (audience) preferenceArr.push("Audience: " + audience);
-  if (keywords) preferenceArr.push("Keywords: " + keywords);
+      // Build preference string
+      let preferenceArr = [];
+      if (selectedTags.length) preferenceArr.push("Tags: " + selectedTags.join(', '));
+      if (language) preferenceArr.push("Language: " + language);
+      if (length) preferenceArr.push("Length: " + length);
+      if (audience) preferenceArr.push("Audience: " + audience);
+      if (keywords) preferenceArr.push("Keywords: " + keywords);
 
-  // Set hidden input value
-  document.getElementById('preference-input').value = preferenceArr.join(' | ');
+      // Set hidden input value
+      document.getElementById('preference-input').value = preferenceArr.join(' | ');
 
-  // Prevent submit if nothing is selected
-  if (preferenceArr.length === 0) {
-    alert("Please select at least one preference.");
-    return false;
-  }
+      // Prevent submit if nothing is selected
+      if (preferenceArr.length === 0) {
+        alert("Please select at least one preference.");
+        return false;
+      }
 
-  // Submit form
-  e.target.submit();
-}
-
+      // Submit form
+      e.target.submit();
+    }
   </script>
 
 </body>

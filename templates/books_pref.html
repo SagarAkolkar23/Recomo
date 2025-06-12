@@ -6,16 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: url('https://www.frontlist.in/storage/uploads/2021/06/GettyImages-577674005.jpg') no-repeat center center/cover;
+      z-index: -2;
+      filter: brightness(0.4) blur(4px);
+    }
+    .glass {
+      background: rgba(24, 26, 27, 0.55);
+      border: 1.5px solid rgba(127, 90, 240, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      border-radius: 18px;
+    }
     .glow {
       box-shadow: 0 0 10px #7f5af0, 0 0 20px #7f5af0;
     }
   </style>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col items-center justify-start font-sans px-6 py-8">
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center font-sans px-6 py-8">
 
   <!-- Navigation Bar -->
-  <div class="w-full max-w-6xl flex justify-center bg-gray-900 border border-gray-700 rounded-full p-2 mt-4 shadow-lg z-50">
-    <div class="flex space-x-2">
+  <div class="glass w-full max-w-3xl flex flex-col sm:flex-row justify-center sm:justify-between items-center bg-gray-900/70 border border-gray-700 rounded-full p-2 mt-4 shadow-lg z-50 mx-auto">
+    <div class="flex space-x-2 mb-2 sm:mb-0 sm:ml-2">
       <a href="{{ url_for('index') }}"
          class="px-5 py-2 rounded-full transition duration-200 text-sm sm:text-base hover:bg-[#7f5af0] hover:text-white {% if request.path == '/movies_pref' or request.path == '/' %}bg-[#7f5af0] text-white{% else %}text-gray-300{% endif %}">
         Movies
@@ -28,17 +44,16 @@
   </div>
 
   <!-- Main Content -->
-  <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-10 items-center mt-16">
-    <!-- Left Side Form -->
-    <div class="space-y-8 max-w-xl mx-auto">
+  <div class="w-full flex flex-col items-center justify-center mt-16">
+    <div class="glass w-full max-w-3xl mx-auto space-y-8 p-12 flex flex-col items-center" style="min-width:400px; min-height:700px;">
       <h1 class="text-4xl font-bold text-[#7f5af0] mb-6 text-center">Tell us your book interests</h1>
 
-      <form method="POST" action="{{ url_for('bookresults') }}" onsubmit="collectPreferences(event)" class="space-y-8">
+      <form method="POST" action="{{ url_for('bookresults') }}" onsubmit="return collectPreferences(event)" class="space-y-8 w-full flex flex-col items-center">
 
         <!-- Genre Tags -->
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-3">Choose genres or themes:</h3>
-          <div id="genre-tags" class="flex flex-wrap gap-3">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold text-white mb-3 text-center">Choose genres or themes:</h3>
+          <div id="genre-tags" class="flex flex-wrap gap-3 justify-center">
             <button type="button" class="neon-tag">Fantasy</button>
             <button type="button" class="neon-tag">Science</button>
             <button type="button" class="neon-tag">Self-help</button>
@@ -51,9 +66,9 @@
         </div>
 
         <!-- Mood Tags -->
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-3">What's your current mood?</h3>
-          <div id="mood-tags" class="flex flex-wrap gap-3">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold text-white mb-3 text-center">What's your current mood?</h3>
+          <div id="mood-tags" class="flex flex-wrap gap-3 justify-center">
             <button type="button" class="neon-tag">Inspired</button>
             <button type="button" class="neon-tag">Curious</button>
             <button type="button" class="neon-tag">Relaxed</button>
@@ -64,9 +79,9 @@
         </div>
 
         <!-- Writing Style -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Preferred writing style:</h3>
-          <select name="style" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Preferred writing style:</h3>
+          <select name="style" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white glass">
             <option value="">Select style</option>
             <option>Simple and clear</option>
             <option>Descriptive and poetic</option>
@@ -76,9 +91,9 @@
         </div>
 
         <!-- Book Length -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Preferred book length:</h3>
-          <select name="length" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Preferred book length:</h3>
+          <select name="length" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white glass">
             <option value="">Select length</option>
             <option>Short (under 200 pages)</option>
             <option>Medium (200–400 pages)</option>
@@ -87,9 +102,9 @@
         </div>
 
         <!-- Target Audience -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Target audience:</h3>
-          <select name="audience" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white">
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Target audience:</h3>
+          <select name="audience" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white glass">
             <option value="">Select audience</option>
             <option>Young Adults</option>
             <option>Adults</option>
@@ -98,10 +113,10 @@
         </div>
 
         <!-- Custom Keywords -->
-        <div>
-          <h3 class="text-xl font-semibold mb-3">Specific interests or keywords:</h3>
+        <div class="w-full flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-3 text-center">Specific interests or keywords:</h3>
           <input name="keywords" type="text" placeholder="e.g. space, Greek mythology, productivity..."
-                 class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white" />
+                 class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white glass" />
         </div>
 
         <!-- Hidden Input -->
@@ -109,19 +124,10 @@
 
         <!-- Submit Button -->
         <button type="submit"
-                class="w-full py-3 rounded-lg bg-[#7f5af0] hover:bg-[#a78bfa] text-white text-lg font-semibold glow transition duration-300">
+                class="w-full py-3 rounded-lg bg-[#7f5af0] hover:bg-[#a78bfa] text-white text-lg font-semibold glow transition duration-300 mt-2">
           Get Book Recommendations
         </button>
       </form>
-    </div>
-
-    <!-- Right Side: Image -->
-    <div class="flex justify-center lg:justify-end items-center px-4">
-      <img
-        src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80"
-        alt="Books Illustration"
-        class="w-full max-w-xl rounded-xl shadow-xl object-contain"
-      />
     </div>
   </div>
   <script>
@@ -129,7 +135,7 @@
       btn.classList.add(
         'px-4', 'py-2', 'rounded-full', 'border', 'border-gray-600',
         'text-white', 'hover:text-[#7f5af0]', 'hover:border-[#7f5af0]',
-        'transition', 'duration-200', 'cursor-pointer'
+        'transition', 'duration-200', 'cursor-pointer', 'glass'
       );
   
       btn.addEventListener('click', () => {
@@ -141,31 +147,31 @@
     });
   
     function collectPreferences(e) {
-  e.preventDefault();
+      e.preventDefault();
 
-  const selectedTags = Array.from(document.querySelectorAll('.neon-tag.bg-\\[\\#7f5af0\\]'))
-    .map(el => el.textContent.trim());
-  const style = document.querySelector('select[name="style"]').value;
-  const length = document.querySelector('select[name="length"]').value;
-  const audience = document.querySelector('select[name="audience"]').value;
-  const keywords = document.querySelector('input[name="keywords"]').value;
+      const selectedTags = Array.from(document.querySelectorAll('.neon-tag.bg-\\[\\#7f5af0\\]'))
+        .map(el => el.textContent.trim());
+      const style = document.querySelector('select[name="style"]').value;
+      const length = document.querySelector('select[name="length"]').value;
+      const audience = document.querySelector('select[name="audience"]').value;
+      const keywords = document.querySelector('input[name="keywords"]').value;
 
-  let preferenceArr = [];
-  if (selectedTags.length) preferenceArr.push("Tags: " + selectedTags.join(', '));
-  if (style) preferenceArr.push("Style: " + style);
-  if (length) preferenceArr.push("Length: " + length);
-  if (audience) preferenceArr.push("Audience: " + audience);
-  if (keywords) preferenceArr.push("Keywords: " + keywords);
+      let preferenceArr = [];
+      if (selectedTags.length) preferenceArr.push("Tags: " + selectedTags.join(', '));
+      if (style) preferenceArr.push("Style: " + style);
+      if (length) preferenceArr.push("Length: " + length);
+      if (audience) preferenceArr.push("Audience: " + audience);
+      if (keywords) preferenceArr.push("Keywords: " + keywords);
 
-  document.getElementById('preference-input').value = preferenceArr.join(' | ');
+      document.getElementById('preference-input').value = preferenceArr.join(' | ');
 
-  if (preferenceArr.length === 0) {
-    alert("Please select at least one preference.");
-    return false;
-  }
+      if (preferenceArr.length === 0) {
+        alert("Please select at least one preference.");
+        return false;
+      }
 
-  e.target.submit();
-}
+      e.target.submit();
+    }
   </script>
 
 </body>

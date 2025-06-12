@@ -125,15 +125,61 @@
       background: #181a1b;
       border: 1px solid #7f5af0;
       transition: background 0.2s, color 0.2s;
+      text-align: center;
+      cursor: pointer;
     }
     .back-link:hover {
       background: #7f5af0;
       color: #fff;
     }
+
+    /* Redesigned refresh button */
+    .refresh-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 40px auto 20px auto;
+      padding: 10px 20px;
+      background: #181a1b;
+      border: 2px solid #7f5af0;
+      color: #7f5af0;
+      font-size: 1.05rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+
+    .refresh-button:hover {
+      background: #7f5af0;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .refresh-icon {
+      display: inline-block;
+      transition: transform 0.5s ease;
+    }
+
+    .refresh-button:hover .refresh-icon {
+      transform: rotate(360deg);
+    }
   </style>
 </head>
 <body>
   <h2>Your Movie Recommendations</h2>
+
+  <!-- Redesigned Refresh Button -->
+  <button class="refresh-button" onclick="refreshRecommendations()" title="Refresh">
+    <span class="refresh-icon">🔄</span>
+    Refresh
+  </button>
+
+  <!-- Hidden form to resubmit preferences -->
+  <form id="refresh-form" method="POST" action="{{ url_for('recommend') }}" style="display:none;">
+    <input type="hidden" name="preference" value="{{ preference }}">
+  </form>
+
   <div class="cards-container">
     {% for movie in recommendations %}
       <div class="movie-card">
@@ -152,7 +198,9 @@
       </div>
     {% endfor %}
   </div>
+
   <a class="back-link" href="{{ url_for('index') }}">← Back to Home</a>
+
   <script>
     function toggleCard(img) {
       // Collapse any expanded card except the one being clicked
@@ -163,6 +211,10 @@
       });
       // Toggle the clicked card
       img.closest('.movie-card').classList.toggle('expanded');
+    }
+
+    function refreshRecommendations() {
+      document.getElementById('refresh-form').submit();
     }
   </script>
 </body>
