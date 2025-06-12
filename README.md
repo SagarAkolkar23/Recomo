@@ -24,7 +24,7 @@ Recomo is a smart recommendation platform that suggests **personalized movies an
 | Layer | Technology |
 |-------|------------|
 | **Frontend** | HTML5, CSS3, Tailwind CSS, JavaScript |
-| **Backend** | Django (Python), RESTful API |
+| **Backend** | Flask (Python), RESTful API |
 | **Database** | MongoDB Atlas |
 | **AI Integration** | Gemini API (Google Generative AI) |
 
@@ -56,7 +56,4 @@ Recomo is a smart recommendation platform that suggests **personalized movies an
 
 4. Results are saved to user history in **MongoDB** for future access (if logged in).
 
----
-
-## 📂 Project Structure
 
