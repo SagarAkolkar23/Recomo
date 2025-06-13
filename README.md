@@ -30,15 +30,6 @@ Recomo is a smart recommendation platform that suggests **personalized movies an
 
 ---
 
-## 📸 Screenshots
-
-> Add real screenshots or GIFs of your web app here
-
-| Home Page | Results Page |
-|----------|--------------|
-| ![Home](https://i.imgur.com/placeholder.png) | ![Results](https://i.imgur.com/placeholder.png) |
-
----
 
 ## 🧠 How It Works
 
