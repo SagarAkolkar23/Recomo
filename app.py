@@ -11,6 +11,11 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY") or "dev_secret_key"
 
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))  
+    app.run(host='0.0.0.0', port=port)
+
 # Debug prints
 print("GEMINI_API_KEY loaded:", bool(os.getenv("GEMINI_API_KEY")))
 print("MONGO_URI starts with:", os.getenv("MONGO_URI")[:20] if os.getenv("MONGO_URI") else "None")
@@ -142,4 +147,5 @@ def bookresults():
     return render_template('bookRecommendations.html', recommendations=recommendations)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
