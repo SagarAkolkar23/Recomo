@@ -54,7 +54,7 @@ def signup():
         hashed_password = generate_password_hash(password)
         users.insert_one({"username": username, "password": hashed_password})
         return redirect(url_for('login'))
-    return render_template('signup.html')
+    return render_template('signUp.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
